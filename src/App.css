@@ -1,0 +1,111 @@
+/* Reset and base styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
+/* Custom Filebar */
+.custom-filebar {
+  position: fixed;
+  /* Make it fixed at the top */
+  top: 0;
+  /* Align it to the top */
+  left: 0;
+  /* Align it to the left */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  /* Adjust height for the filebar */
+  width: 100vw;
+  /* Use the full viewport width */
+  background-color: #2c2c2c;
+  /* Darker background for the filebar */
+  color: #fff;
+  -webkit-app-region: drag;
+  /* Makes the bar draggable in Electron */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  z-index: 9999;
+  /* Ensure it stays on top of other content */
+}
+
+.app-info {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  flex-grow: 1;
+  /* Ensures this element takes up remaining space */
+}
+
+.app-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.filebar-controls {
+  display: flex;
+  -webkit-app-region: no-drag;
+  /* Ensures buttons are clickable */
+}
+
+.filebar-controls button {
+  border: none;
+  background: transparent;
+  width: 46px;
+  height: 40px;
+  /* Match the filebar height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  outline: none;
+  font-size: 16px;
+  /* Button text size */
+}
+
+.minimize-button {
+  color: #bbb;
+}
+
+.maximize-button {
+  color: #bbb;
+}
+
+.close-button {
+  color: #e81123;
+  /* Red color for close button */
+}
+
+.minimize-button:hover,
+.maximize-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  /* Subtle hover effect */
+}
+
+.close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.filebar-controls button:active {
+  background-color: rgba(0, 0, 0, 0.2);
+  /* Active button effect */
+}
+
+/* Icons in filebar */
+.app-icon {
+  height: 16px;
+  margin-left: 12px;
+  margin-right: 8px;
+}
