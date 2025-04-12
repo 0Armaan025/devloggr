@@ -1,34 +1,34 @@
 import { useState } from 'react';
 import './App.css';
+// import CustomFileBar from "../src/component/custom-filebar/CustomFilebar";
+import OnboardingComponent from "./components/onboarding/OnboardingComponent"; // Import the new component
+import SignUpPage from './page/sign-up/SignUpPage';
+
+
 
 function App() {
   const [count, setCount] = useState(0);
+  const [isOnboarding, setIsOnboarding] = useState(true); // State to control whether to show onboarding
+
 
   // Custom window controls
-  const handleMinimize = () => {
-    window.electron.minimize();
-  };
 
-  const handleMaximize = () => {
-    window.electron.maximize();
-  };
 
-  const handleClose = () => {
-    window.electron.close();
+  const handleGetStarted = () => {
+    setIsOnboarding(false); // Hide onboarding when Get Started is clicked
   };
 
   return (
     <>
-      <div className="custom-filebar">
-        <div className="app-info">
-          <span className="app-title" style={{ fontFamily: "Poppins, sans-serif" }}>DevLoggr</span>
-        </div>
-        <div className="filebar-controls">
-          <button onClick={handleMinimize} className="minimize-button">—</button>
-          <button onClick={handleMaximize} className="maximize-button">□</button>
-          <button onClick={handleClose} className="close-button">×</button>
-        </div>
-      </div>
+      {/* file bar starts here */}
+
+      {/* file bar ends here */}
+
+      {isOnboarding ? (
+        <OnboardingComponent onGetStarted={handleGetStarted} />
+      ) : (
+        <SignUpPage />
+      )}
     </>
   );
 }
