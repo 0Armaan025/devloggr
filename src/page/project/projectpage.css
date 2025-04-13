@@ -8,6 +8,12 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.project-wrapper {
+    display: flex;
+    flex-direction: row;
+
+}
+
 .project-header {
     display: flex;
     justify-content: space-between;
@@ -39,6 +45,11 @@
 
 .report-btn {
     background-color: #4CAF50;
+    color: white;
+}
+
+.export-btn {
+    background-color: #434343;
     color: white;
 }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './projectpage.css';
+import { ArrowLeftIcon } from 'lucide-react';
 import CustomFilebar from '../../components/custom-filebar/CustomFilebar';
 
 const ProjectPage = () => {
@@ -99,11 +100,21 @@ const ProjectPage = () => {
         <>
             <CustomFilebar />
             <div className="project-container" style={{ marginTop: "2rem" }}>
+
                 <div className="project-header">
-                    <h1>{name}</h1>
+                    <div className="togeter" style={{ display: "flex", flexDirection: "row" }}>
+
+                        <ArrowLeftIcon size={30} style={{ marginRight: "20px", cursor: "pointer" }} onClick={() => {
+                            window.history.back();
+                        }} />
+                        <h1>{name}</h1>
+                    </div>
                     <div className="project-actions">
                         <button className="btn report-btn" onClick={generateReport}>
                             Generate Report
+                        </button>
+                        <button className="btn export-btn" onClick={() => { alert('exporting as a pdf'); }}>
+                            Export Report
                         </button>
                         <button className="btn readme-btn" onClick={generateReadme}>
                             Generate README
@@ -122,7 +133,7 @@ const ProjectPage = () => {
                         className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`}
                         onClick={() => setActiveTab('history')}
                     >
-                        History
+                        Historythead
                     </button>
                     <button
                         className={`tab-btn ${activeTab === 'report' ? 'active' : ''}`}
