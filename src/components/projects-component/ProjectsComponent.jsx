@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import './projectscomponent.css';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectsComponent = () => {
+
+    const navigate = useNavigate();
+
     const [projects, setProjects] = useState([
         {
             id: 1,
@@ -45,7 +49,9 @@ const ProjectsComponent = () => {
 
             <div className="projects-grid">
                 {projects.map((project) => (
-                    <div key={project.id} className="project-tile">
+                    <div key={project.id} className="project-tile" onClick={() => {
+                        navigate(`/project/${project.name}`);
+                    }}>
                         <h3 className="project-name">{project.name}</h3>
                         <p className="project-description">{project.description}</p>
                     </div>
