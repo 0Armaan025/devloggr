@@ -1,6 +1,6 @@
 .dashboardPage {
     display: flex;
-
+    overflow-y: scroll;
     justify-content: center;
     align-items: start;
 }

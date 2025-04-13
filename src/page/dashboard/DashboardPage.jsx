@@ -3,6 +3,8 @@ import './dashboardpage.css';
 import CustomFilebar from '../../components/custom-filebar/CustomFilebar';
 import SideBar from '../../components/side-bar/SideBar';
 import ProfileComponent from "../../components/profile-component/ProfileComponent";
+import ProjectsComponent from '../../components/projects-component/ProjectsComponent';
+import LeaderboardPageComponent from '../../components/leaderboard/LeaderboardPageComponent';
 
 const DashboardPage = () => {
 
@@ -35,14 +37,14 @@ const DashboardPage = () => {
 
                         {title === "Projects" && (
                             <>
-                                <h3>This is projects</h3>
+                                <ProjectsComponent />
 
                             </>
                         )}
 
                         {title === "Leaderboard" && (
                             <>
-                                <h3>This is leaderboard</h3>
+                                <LeaderboardPageComponent />
 
                             </>
                         )}
