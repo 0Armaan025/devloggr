@@ -1,45 +1,42 @@
 .leaderboard-container {
-    max-width: 120vh;
+    max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
     color: #fff;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background-color: #1a1a1a;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    margin-bottom: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .leaderboard-title {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #00b4db, #0083b0);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    font-weight: 800;
+    color: #ffffff;
+    font-weight: 700;
 }
 
 .leaderboard-subtitle {
     text-align: center;
     color: #a1a1a1;
     margin-bottom: 2rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .leaderboard-header {
     display: flex;
-    padding: 1rem 1.5rem;
+    padding: 1rem;
     background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
+    border-radius: 8px;
     margin-bottom: 1rem;
     font-weight: 600;
     color: #8a8a8a;
+    font-size: 0.9rem;
 }
 
 .rank-header {
-    flex: 0 0 80px;
+    flex: 0 0 60px;
 }
 
 .player-header {
@@ -47,28 +44,27 @@
 }
 
 .score-header {
-    flex: 0 0 120px;
+    flex: 0 0 100px;
     text-align: right;
 }
 
 .leaderboard-list {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .leaderboard-item {
     display: flex;
     align-items: center;
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 0.8rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
     background-color: rgba(255, 255, 255, 0.03);
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    border-left: 4px solid transparent;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
 }
 
 .leaderboard-item:hover {
     background-color: rgba(255, 255, 255, 0.08);
-    transform: translateX(5px);
 }
 
 .top-three {
@@ -84,77 +80,82 @@
 .your-rank {
     background: linear-gradient(90deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.05) 100%);
     border-left-color: gold;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
 }
 
 .player-rank {
-    flex: 0 0 80px;
-    font-size: 1.2rem;
+    flex: 0 0 60px;
+    font-size: 1rem;
     position: relative;
 }
 
 .rank-medal {
-    margin-left: 0.5rem;
-    font-size: 1.4rem;
+    margin-left: 0.3rem;
+    font-size: 1.1rem;
 }
 
 .player-info {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.8rem;
 }
 
 .player-avatar {
-    font-size: 1.5rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #333;
 }
 
 .player-name {
     font-weight: 500;
+    font-size: 0.95rem;
 }
 
 .player-score {
-    flex: 0 0 120px;
+    flex: 0 0 100px;
     text-align: right;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #00b4db;
 }
 
 .you-indicator {
     display: inline-block;
     margin-left: 0.5rem;
-    padding: 0.2rem 0.5rem;
+    padding: 0.15rem 0.4rem;
     background-color: gold;
     color: #000;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: bold;
-    border-radius: 10px;
+    border-radius: 8px;
     text-transform: uppercase;
 }
 
-.jump-to-rank {
+.jump-to-rank,
+.view-more-btn {
     display: block;
-    margin: 0 auto;
-    padding: 0.8rem 1.5rem;
-    background: linear-gradient(to right, #00b4db, #0083b0);
+    margin: 0.5rem auto;
+    padding: 0.6rem 1.2rem;
+    background-color: #333;
     color: white;
     border: none;
     border-radius: 50px;
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 180, 219, 0.3);
+    transition: all 0.2s ease;
 }
 
-.jump-to-rank:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 180, 219, 0.4);
+.jump-to-rank {
+    background: linear-gradient(to right, #333, #444);
 }
 
-.jump-to-rank:active {
-    transform: translateY(0);
+.jump-to-rank:hover,
+.view-more-btn:hover {
+    background: linear-gradient(to right, #444, #555);
+    transform: translateY(-1px);
 }
 
 .arrow-down {
@@ -173,10 +174,10 @@
     }
 
     40% {
-        transform: translateY(-5px);
+        transform: translateY(-3px);
     }
 
     60% {
-        transform: translateY(-3px);
+        transform: translateY(-2px);
     }
 }

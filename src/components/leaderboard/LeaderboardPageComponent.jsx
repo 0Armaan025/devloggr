@@ -2,26 +2,31 @@ import React, { useState, useRef } from 'react';
 import './leaderboardpagecomponent.css';
 
 const LeaderboardPageComponent = () => {
+    const [showAll, setShowAll] = useState(false);
     const [leaderboard] = useState([
-        { id: 1, name: 'CodeMaster', score: 9850, avatar: '👑', isYou: false },
-        { id: 2, name: 'DevQueen', score: 9320, avatar: '⚡', isYou: false },
-        { id: 3, name: 'ByteLord', score: 9015, avatar: '💻', isYou: false },
-        { id: 4, name: 'PixelNinja', score: 8765, avatar: '🎮', isYou: false },
-        { id: 5, name: 'SyntaxSamurai', score: 8540, avatar: '🗡️', isYou: false },
-        { id: 6, name: 'BugHunter', score: 8320, avatar: '🐛', isYou: false },
-        { id: 7, name: 'ReactRanger', score: 8100, avatar: '⚛️', isYou: false },
-        { id: 8, name: 'You', score: 7950, avatar: '😎', isYou: true },
-        { id: 9, name: 'CSSWizard', score: 7820, avatar: '🎨', isYou: false },
-        { id: 10, name: 'NodeKnight', score: 7650, avatar: '🛡️', isYou: false },
+        { id: 1, name: 'CodeMaster', score: 9850, avatar: 'https://randomuser.me/api/portraits/men/32.jpg', isYou: false },
+        { id: 2, name: 'DevQueen', score: 9320, avatar: 'https://randomuser.me/api/portraits/women/44.jpg', isYou: false },
+        { id: 3, name: 'ByteLord', score: 9015, avatar: 'https://randomuser.me/api/portraits/men/22.jpg', isYou: false },
+        { id: 4, name: 'PixelNinja', score: 8765, avatar: 'https://randomuser.me/api/portraits/women/63.jpg', isYou: false },
+        { id: 5, name: 'SyntaxSamurai', score: 8540, avatar: 'https://randomuser.me/api/portraits/men/41.jpg', isYou: false },
+        { id: 6, name: 'BugHunter', score: 8320, avatar: 'https://randomuser.me/api/portraits/women/28.jpg', isYou: false },
+        { id: 7, name: 'ReactRanger', score: 8100, avatar: 'https://randomuser.me/api/portraits/men/19.jpg', isYou: false },
+        { id: 8, name: 'You', score: 7950, avatar: 'https://randomuser.me/api/portraits/men/1.jpg', isYou: true },
+        { id: 9, name: 'CSSWizard', score: 7820, avatar: 'https://randomuser.me/api/portraits/women/33.jpg', isYou: false },
+        { id: 10, name: 'NodeKnight', score: 7650, avatar: 'https://randomuser.me/api/portraits/men/55.jpg', isYou: false },
     ]);
 
     const yourRankRef = useRef(null);
+    const displayedItems = showAll ? leaderboard : leaderboard.slice(0, 5);
 
     const scrollToYourRank = () => {
-        yourRankRef.current.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-        });
+        setShowAll(true);
+        setTimeout(() => {
+            yourRankRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }, 100);
     };
 
     return (
@@ -36,7 +41,7 @@ const LeaderboardPageComponent = () => {
             </div>
 
             <div className="leaderboard-list">
-                {leaderboard.map((player, index) => (
+                {displayedItems.map((player, index) => (
                     <div
                         key={player.id}
                         ref={player.isYou ? yourRankRef : null}
@@ -47,7 +52,7 @@ const LeaderboardPageComponent = () => {
                             {index < 3 && <span className="rank-medal">{['🥇', '🥈', '🥉'][index]}</span>}
                         </div>
                         <div className="player-info">
-                            <span className="player-avatar">{player.avatar}</span>
+                            <img src={player.avatar} alt={player.name} className="player-avatar" />
                             <span className="player-name">{player.name}</span>
                         </div>
                         <div className="player-score">
@@ -57,6 +62,12 @@ const LeaderboardPageComponent = () => {
                     </div>
                 ))}
             </div>
+
+            {!showAll && (
+                <button className="view-more-btn" onClick={() => setShowAll(true)}>
+                    View More
+                </button>
+            )}
 
             <button className="jump-to-rank" onClick={scrollToYourRank}>
                 Jump to My Rank
