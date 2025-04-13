@@ -1,0 +1,53 @@
+.sideBar {
+    width: 14rem;
+    min-height: 100vh;
+    background: #232323;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.initial-space {
+    height: 5vh;
+}
+
+.side-item {
+    cursor: pointer;
+    display: flex;
+    padding: 16px 24px;
+    flex-direction: row;
+    align-items: center;
+    color: white;
+    width: 100%;
+    transition: 0.2s ease-in-out;
+    border-left: 3px solid transparent;
+}
+
+.side-item.active {
+    background: #1a1a1a;
+    border-left: 3px solid #4a9eff;
+}
+
+
+.side-item:hover {
+    background: #1a1a1a;
+    border-left: 3px solid #4a9eff;
+}
+
+.side-item h3 {
+    margin-left: 16px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: white;
+}
+
+.logout {
+    margin-top: auto;
+    margin-bottom: 24px;
+    color: #ff6b6b;
+}
+
+.logout h3 {
+    color: #ff6b6b;
+}

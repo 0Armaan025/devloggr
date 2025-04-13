@@ -1,0 +1,47 @@
+.dashboardPage {
+    display: flex;
+
+    justify-content: center;
+    align-items: start;
+}
+
+.contentSide {
+    min-width: 155vh;
+    overflow-x: hidden;
+
+    display: flex;
+    margin-top: 5vh;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+
+.contentSideTitle {
+    font-family: 'Poppins' sans-serif;
+    margin-left: 2vh;
+    margin-top: 2vh;
+    font-weight: 700;
+    font-size: 3rem;
+
+
+}
+
+.titleDiv {
+    width: 155vh;
+    align-items: start;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgb(34, 34, 34);
+
+}
+
+.profileCompDiv {
+    align-items: start;
+    justify-items: start;
+    width: 100%;
+
+}

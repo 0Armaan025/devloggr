@@ -1,0 +1,446 @@
+.profileComponent {
+    max-width: 1000px;
+
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    color: #e0e0e0;
+    overflow: hidden;
+}
+
+/* Left Panel */
+.profileLeftPanel {
+    width: 35%;
+    padding: 30px;
+    background-color: #232323;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-right: 1px solid #333;
+}
+
+/* Right Panel */
+.profileRightPanel {
+    width: 65%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.statsPanel {
+    padding: 30px;
+    background-color: #1a1a1a;
+}
+
+.passwordResetPanel {
+    padding: 30px;
+    background-color: #1c1c1c;
+    border-top: 1px solid #333;
+}
+
+.panelTitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin: 0 0 25px 0;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+.panelTitle::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: #4a6bff;
+    border-radius: 2px;
+}
+
+/* Profile Photo */
+.profilePhotoContainer {
+    position: relative;
+    margin-bottom: 25px;
+    align-self: center;
+}
+
+.profilePhoto {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #333;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+        0 0 0 2px rgba(74, 107, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.profilePhoto:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4),
+        0 0 0 3px rgba(74, 107, 255, 0.5);
+}
+
+.editPhotoButton {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #4a6bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+}
+
+.editPhotoButton:hover {
+    background-color: #3651d8;
+    transform: scale(1.1);
+}
+
+.photoEditContainer {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    width: 280px;
+    margin-top: 15px;
+    border: 1px solid #333;
+}
+
+.photoEditContainer::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #2a2a2a;
+}
+
+/* Profile Name */
+.profileNameContainer {
+    width: 100%;
+    position: relative;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.profileName {
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+    padding-right: 30px;
+}
+
+.editButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.2s;
+}
+
+.editButton:hover {
+    color: #4a6bff;
+    transform: scale(1.1);
+}
+
+/* Language Section */
+.languagePreference {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.favoriteLanguageContainer,
+.mostUsedLanguageContainer {
+    margin-bottom: 20px;
+}
+
+.languageLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.languageValue {
+    font-size: 20px;
+    font-weight: 500;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #2a2a2a;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border-left: 3px solid #4a6bff;
+}
+
+.mostUsedLanguage {
+    background-color: #2a2a2a;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 3px solid #00b8d4;
+}
+
+.mostUsedLanguage>span {
+    font-size: 18px;
+    font-weight: 500;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.languageBar {
+    height: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.languageProgress {
+    height: 100%;
+    background: linear-gradient(to right, #00b8d4, #4a6bff);
+    border-radius: 5px;
+}
+
+.languagePercentage {
+    font-size: 14px;
+    color: #888;
+    text-align: right;
+    display: block;
+}
+
+/* Edit Containers */
+.editContainer {
+    width: 100%;
+}
+
+.editInput {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.editInput:focus {
+    outline: none;
+    border-color: #4a6bff;
+    box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
+}
+
+/* Stats Items */
+.statItem {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #232323;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statItem:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.statIcon {
+    color: #4a6bff;
+    margin-right: 15px;
+    background-color: rgba(74, 107, 255, 0.1);
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.statInfo h4 {
+    font-size: 14px;
+    font-weight: 400;
+    color: #888;
+    margin: 0 0 5px;
+}
+
+.statInfo p {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.statSubtext {
+    font-size: 14px;
+    font-weight: 400;
+    color: #888;
+}
+
+/* Security Section */
+.securitySection {
+    margin-top: auto;
+    width: 100%;
+}
+
+.passwordResetButton {
+    width: 100%;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.passwordResetButton:hover {
+    background-color: #333;
+    color: #ffffff;
+}
+
+/* Input Groups */
+.inputGroup {
+    margin-bottom: 15px;
+}
+
+.inputGroup label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+.inputGroup input {
+    width: 100%;
+    padding: 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #ffffff;
+}
+
+.inputGroup input:focus {
+    outline: none;
+    border-color: #4a6bff;
+    box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
+}
+
+/* Button Groups */
+.buttonGroup {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.saveButton,
+.cancelButton {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.saveButton {
+    background-color: #4a6bff;
+    color: white;
+    border: none;
+}
+
+.saveButton:hover {
+    background-color: #3651d8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cancelButton {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+.cancelButton:hover {
+    background-color: #333;
+    color: #ffffff;
+}
+
+.forgotPasswordLink {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.forgotPasswordLink a {
+    color: #4a6bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgotPasswordLink a:hover {
+    text-decoration: underline;
+    color: #7088ff;
+}
+
+.forgotPasswordForm p {
+    margin-bottom: 15px;
+    color: #e0e0e0;
+}
+
+/* Media queries for responsiveness */
+@media screen and (max-width: 768px) {
+    .profileComponent {
+        flex-direction: column;
+        margin: 0;
+        /* Remove centering */
+        align-items: flex-start;
+        /* Align to the start */
+    }
+
+    .profileLeftPanel,
+    .profileRightPanel {
+        width: 100%;
+    }
+
+    .profileLeftPanel {
+        border-right: none;
+        border-bottom: 1px solid #333;
+    }
+}
