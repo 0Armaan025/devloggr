@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './settingscomponent.css';
-import { Twitter, X } from 'lucide-react';
+import { Twitter, X, Clock } from 'lucide-react';
 
 const SettingsComponent = () => {
     const [settings, setSettings] = useState({
         quickRoast: false,
         autoTweet: false,
         speechToText: false,
-        darkMode: true // Default to dark mode
+        darkMode: true, // Default to dark mode
+        tweetTime: '09:00' // Default tweet time
     });
 
     const [showTwitterModal, setShowTwitterModal] = useState(false);
@@ -33,6 +34,12 @@ const SettingsComponent = () => {
                 localStorage.removeItem('twitter_data');
             }
         }
+
+        // Load saved tweet time if it exists
+        const savedTweetTime = localStorage.getItem('tweet_time');
+        if (savedTweetTime) {
+            setSettings(prev => ({ ...prev, tweetTime: savedTweetTime }));
+        }
     }, []);
 
     const handleToggle = (setting) => {
@@ -49,6 +56,17 @@ const SettingsComponent = () => {
 
         // If user disables autoTweet, we don't disconnect Twitter,
         // but we stop automatic tweets
+    };
+
+    const handleTweetTimeChange = (e) => {
+        const newTime = e.target.value;
+        setSettings({
+            ...settings,
+            tweetTime: newTime
+        });
+
+        // Save the time setting to localStorage
+        localStorage.setItem('tweet_time', newTime);
     };
 
     const connectTwitter = () => {
@@ -84,6 +102,13 @@ const SettingsComponent = () => {
 
         // Turn off auto tweet feature
         setSettings(prev => ({ ...prev, autoTweet: false }));
+    };
+
+    // Save settings to localStorage
+    const saveSettings = () => {
+        localStorage.setItem('app_settings', JSON.stringify(settings));
+        // Show a success message or notification
+        alert('Settings saved successfully!');
     };
 
     // Listen for Twitter auth success event from Electron
@@ -243,6 +268,29 @@ const SettingsComponent = () => {
                             <span className="slider"></span>
                         </label>
                     </div>
+
+                    {/* New Tweet Time Picker Setting */}
+                    {settings.autoTweet && (
+                        <div className="setting-item tweet-time-setting">
+                            <div className="setting-info">
+                                <h3>Daily Tweet Time</h3>
+                                <p>Set when your daily progress tweets will be sent</p>
+                                <div className="time-selector">
+                                    <Clock size={18} className="time-icon" />
+                                    <input
+                                        type="time"
+                                        value={settings.tweetTime}
+                                        onChange={handleTweetTimeChange}
+                                        className="time-input"
+                                    />
+                                </div>
+                                <div className="feature-callout">
+                                    <span className="feature-badge">SCHEDULED</span>
+                                    <span className="feature-note">Best results at high-engagement times</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <div className="feature-spotlight">
@@ -253,6 +301,7 @@ const SettingsComponent = () => {
                     <ul className="feature-benefits">
                         <li><strong>Quick Roast:</strong> Adds a fun element to the app</li>
                         <li><strong>Automatic Tweets:</strong> Helps developers share progress easily</li>
+                        <li><strong>Tweet Scheduling:</strong> Optimize your social media presence</li>
                         <li><strong>Speech to Text Commands:</strong> Makes the app accessible to everyone</li>
                     </ul>
                 </div>
@@ -260,7 +309,7 @@ const SettingsComponent = () => {
 
             <div className="settings-actions">
                 <button className="settings-button cancel">Cancel</button>
-                <button className="settings-button save">Save Changes</button>
+                <button className="settings-button save" onClick={saveSettings}>Save Changes</button>
             </div>
 
             {/* Twitter Auth Modal */}

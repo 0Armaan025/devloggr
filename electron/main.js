@@ -144,8 +144,8 @@ function createTwitterAuthWindow() {
     console.log('Generated code verifier:', twitterCodeVerifier.substring(0, 5) + '...');
 
     // Twitter OAuth parameters
-    const twitterClientId = 'YOUR_TWITTER_CLIENT_ID'; // Replace with your actual Client ID
-    const redirectUri = 'http://127.0.0.1:5173/twitter-callback';
+    const twitterClientId = 'aGpxc0RpeVl1Vll2bzhWeW80NVI6MTpjaQ'; // Replace with your actual Client ID
+    const redirectUri = 'http://127.0.0.1:5173/callback';
 
     // Create the auth URL properly
     const authUrl = new URL('https://twitter.com/i/oauth2/authorize');
@@ -257,27 +257,30 @@ async function getTwitterToken(code, redirectUri, codeVerifier) {
     try {
         const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-        const twitterClientId = 'YOUR_TWITTER_CLIENT_ID'; // Same as above
-        // Twitter no longer requires client_secret for PKCE flow
+        const twitterClientId = 'aGpxc0RpeVl1Vll2bzhWeW80NVI6MTpjaQ';
 
-        console.log('Exchanging code for token...');
+        console.log('Exchanging code for token with PKCE...');
         console.log('Using code verifier:', codeVerifier.substring(0, 5) + '...');
 
         // Create proper form data for token request
         const params = new URLSearchParams();
-        params.append('client_id', twitterClientId);
-        // Do not include client_secret for PKCE flow
         params.append('grant_type', 'authorization_code');
         params.append('code', code);
         params.append('redirect_uri', redirectUri);
         params.append('code_verifier', codeVerifier);
+        params.append('client_id', twitterClientId);
 
-        console.log('Sending token request params:', params.toString());
+        // Create the Authorization header using Basic authentication
+        // For PKCE flow, use client_id with empty client_secret (client_id:)
+        const authString = Buffer.from(`${twitterClientId}:`).toString('base64');
+
+        console.log('Sending token request with proper Authorization header');
 
         const response = await fetch('https://api.twitter.com/2/oauth2/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Basic ${authString}`
             },
             body: params
         });
@@ -297,7 +300,43 @@ async function getTwitterToken(code, redirectUri, codeVerifier) {
         }
 
         if (data.access_token) {
-            // Rest of function remains the same...
+            console.log('Twitter access token received successfully');
+
+            // Get user data with the token
+            try {
+                const userResponse = await fetch('https://api.twitter.com/2/users/me', {
+                    headers: {
+                        'Authorization': `Bearer ${data.access_token}`
+                    }
+                });
+
+                if (!userResponse.ok) {
+                    throw new Error(`User data request failed: ${userResponse.status}`);
+                }
+
+                const userData = await userResponse.json();
+
+                if (userData?.data?.id) {
+                    console.log('User data received for:', userData.data.username);
+
+                    // Send token and user data to renderer
+                    if (mainWindow && !mainWindow.isDestroyed()) {
+                        mainWindow.webContents.send('twitter-auth-success', {
+                            token: data.access_token,
+                            userId: userData.data.id,
+                            username: userData.data.username
+                        });
+                        return true;
+                    } else {
+                        throw new Error('Main window is unavailable');
+                    }
+                } else {
+                    throw new Error('User data not found in response');
+                }
+            } catch (userError) {
+                console.error('Error fetching Twitter user data:', userError);
+                throw new Error(`Authentication succeeded but failed to get user data: ${userError.message}`);
+            }
         } else {
             const errorMsg = data.error_description || data.error || 'Failed to obtain access token';
             console.error('Token error:', errorMsg, data);
@@ -316,8 +355,8 @@ async function getGithubToken(code) {
     try {
         const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-        const client_id = 'Ov23liUU7gvGyGV4n6f4';
-        const client_secret = 'c751481076ced95b29964dd9153d4ffaac45dfa4';
+        const client_id = 'aGpxc0RpeVl1Vll2bzhWeW80NVI6MTpjaQ';
+        const client_secret = '3aEfDpgwHxn0_7v8sCdHeDDMMgoDPRLCDAWkIZpBBZtcx4PmQH';
         const redirect_uri = 'http://localhost:5173/callback';
 
         console.log('Exchanging code for token...');

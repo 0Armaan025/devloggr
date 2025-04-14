@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './projectpage.css';
-import { ArrowLeftIcon, CheckCircle, FilePlus, FileText, Download, Star } from 'lucide-react';
+import { ArrowLeftIcon, CheckCircle, FilePlus, FileText, Download, Star, Speaker } from 'lucide-react';
 import CustomFilebar from '../../components/custom-filebar/CustomFilebar';
 
 const ProjectPage = () => {
@@ -129,7 +129,7 @@ const ProjectPage = () => {
             <CustomFilebar />
             <div className="project-page-wrapper">
                 <div className="project-container">
-                    <div className="project-header">
+                    <div className="project-header" style={{ marginTop: "40px" }}>
                         <div className="project-title-area">
                             <button className="back-button" onClick={() => navigate(-1)}>
                                 <ArrowLeftIcon size={20} />
@@ -139,6 +139,12 @@ const ProjectPage = () => {
                             {isCompleted && <div className="completed-badge">Completed</div>}
                         </div>
                         <div className="project-actions">
+                            <button className="btn report-btn" style={{ backgroundColor: "#1a1a1a" }} onClick={() => {
+                                alert("you have been roasted");
+                            }}>
+                                <Speaker size={18} />
+                                Quick Roast
+                            </button>
                             <button
                                 className={`btn ${isCompleted ? 'incomplete-btn' : 'complete-btn'}`}
                                 onClick={markAsComplete}
