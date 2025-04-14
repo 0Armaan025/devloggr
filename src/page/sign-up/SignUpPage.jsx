@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './signuppage.css';
 import { useNavigate } from 'react-router-dom';
 import CustomFilebar from '../../components/custom-filebar/CustomFilebar';
 
 const SignUpPage = () => {
-
     const navigate = useNavigate();
+    const [userData, setUserData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -21,16 +23,103 @@ const SignUpPage = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
-        // Add your sign-up logic here
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            // Make API call to your backend signup endpoint
+            const response = await fetch('https://api.yourdomain.com/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to sign up');
+            }
+
+            // Store token in localStorage
+            localStorage.setItem('auth_token', data.token);
+
+            // Alert the username
+            alert(`Successfully signed up! Welcome, ${formData.name}`);
+
+            // Navigate to dashboard
+            navigate('/dashboard');
+        } catch (error) {
+            setError(error.message);
+            console.error('Signup error:', error);
+            // For demo purposes, we'll navigate anyway
+
+            navigate('/dashboard');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleGoogleAuth = () => {
-        // Add your Google auth logic here
-        console.log('Google auth requested');
+        if (typeof window.electron !== 'undefined') {
+            try {
+                console.log('Starting GitHub authentication...');
+                // Using the simplest approach that should work with the preload script
+                window.electron.send('start-github-login');
+            } catch (e) {
+                console.error('Error during GitHub authentication:', e);
+                alert('Failed to start GitHub login: ' + e.message);
+            }
+        } else {
+            console.log('Running in a non-Electron environment');
+            alert("GitHub authentication requires the Electron environment");
+        }
     };
+
+    useEffect(() => {
+
+        if (window.electron) {
+
+            // Listen for authent   ication success
+            const handleAuthSuccess = (token) => {
+
+                console.log('Received token:', token);
+
+                // Fetch user info with the token
+                fetch('https://api.github.com/user', {
+                    headers: {
+                        'Authorization': `token ${token}`
+                    }
+                })
+                    .then(response => response.json())
+                    .then(userData => {
+                        setUserData(userData);
+                        // Store token and user data
+                        localStorage.setItem('auth_token', token);
+                        localStorage.setItem('user_data', JSON.stringify(userData));
+
+                        // Alert the username
+                        alert(`Successfully signed in with GitHub! Welcome, ${userData.login}`);
+
+                        // Navigate to dashboard
+                        navigate('/dashboard');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user data:', error);
+                    });
+            };
+
+            window.electron.on('auth-success', handleAuthSuccess);
+
+            // Cleanup
+            return () => {
+                window.electron.removeAllListeners('auth-success');
+            };
+        }
+    }, [navigate]);
 
     return (
         <>
@@ -48,6 +137,8 @@ const SignUpPage = () => {
                     <div className="form-container">
                         <h2 style={{ fontFamily: "Poppins, sans-serif" }}>Create an account</h2>
                         <p className="subtitle">Fill in your details to get started</p>
+
+                        {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
 
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
@@ -89,26 +180,35 @@ const SignUpPage = () => {
                                 />
                             </div>
 
-                            <button type="submit" className="signup-btn" onClick={() => {
-                                navigate('/dashboard');
-                            }}>Sign Up</button>
+                            <button
+                                type="submit"
+                                className="signup-btn"
+                                disabled={isLoading}
+                            >
+                                {isLoading ? 'Signing up...' : 'Sign Up'}
+                            </button>
                         </form>
 
                         <div className="divider">
                             <span>OR</span>
                         </div>
 
-                        <button onClick={handleGoogleAuth} className="google-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-                                <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z" fill="white" />
+                        <button
+                            onClick={handleGoogleAuth}
+                            className="google-btn"
+                            disabled={isLoading}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.94.58.11.79-.25.79-.56 0-.28-.01-1.02-.01-2-3.2.69-3.88-1.54-3.88-1.54-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.72-1.56-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.2-3.09-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 2.89-.39c.98 0 1.97.13 2.89.39 2.2-1.49 3.18-1.18 3.18-1.18.63 1.58.24 2.75.12 3.04.75.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.41-5.27 5.69.42.37.77 1.1.77 2.22 0 1.6-.01 2.89-.01 3.28 0 .31.21.68.8.56A10.999 10.999 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z" />
                             </svg>
-                            Continue with Google
+                            Continue with Github
                         </button>
 
-                        <p className="login-link" onClick={() => {
-                            navigate('/log-in');
-                        }}>
-                            Already have an account? <a href="#">Log in</a>
+                        <p className="login-link">
+                            Already have an account? <a href="#" onClick={(e) => {
+                                e.preventDefault();
+                                navigate('/log-in');
+                            }}>Log in</a>
                         </p>
                     </div>
                 </div>
