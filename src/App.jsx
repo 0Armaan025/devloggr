@@ -4,6 +4,9 @@ import './App.css';
 import OnboardingComponent from "./components/onboarding/OnboardingComponent"; // Import the new component
 import SignUpPage from './page/sign-up/SignUpPage';
 
+import { LogIn } from 'lucide-react';
+import LoginPage from './page/log-in/LogInComponent';
+
 
 
 function App() {
@@ -27,7 +30,7 @@ function App() {
       {isOnboarding ? (
         <OnboardingComponent onGetStarted={handleGetStarted} />
       ) : (
-        <SignUpPage />
+        <LoginPage />
       )}
     </>
   );

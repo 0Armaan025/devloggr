@@ -1,112 +1,65 @@
-import React, { useState } from 'react';
-import './projectscomponent.css';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PlusCircle, CheckCircle } from 'lucide-react';
+import './projectscomponent.css';
 
 const ProjectsComponent = () => {
-
     const navigate = useNavigate();
-
     const [projects, setProjects] = useState([
-        {
-            id: 1,
-            name: 'Project 1',
-            description: 'A web application for task management'
-        },
-        {
-            id: 2,
-            name: 'Project 2',
-            description: 'E-commerce platform with React'
-        },
-        {
-            id: 3,
-            name: 'Project 3',
-            description: 'Portfolio website with animations'
-        },
+        { id: 1, name: 'Twitter Clone', description: 'A clone of the Twitter platform with basic functionalities' },
+        { id: 2, name: 'E-commerce App', description: 'An online shopping application with cart and checkout features' },
+        { id: 3, name: 'Weather App', description: 'An application to check weather forecasts for different locations' },
+        { id: 4, name: 'Task Manager', description: 'A simple task management tool with drag-and-drop functionality' }
     ]);
-    const [showModal, setShowModal] = useState(false);
-    const [projectName, setProjectName] = useState('');
-    const [projectDescription, setProjectDescription] = useState('');
-    const [repoUrl, setRepoUrl] = useState('');
 
-    const handleAddProject = () => {
-        if (projectName.trim() && repoUrl.trim()) {
-            const newProject = {
-                id: projects.length + 1,
-                name: projectName,
-                description: projectDescription,
-                repoUrl: repoUrl
-            };
-            setProjects([...projects, newProject]);
-            setProjectName('');
-            setProjectDescription('');
-            setRepoUrl('');
-            setShowModal(false);
-        }
+    const [completedProjects, setCompletedProjects] = useState([]);
+
+    // Load completed projects from localStorage
+    useEffect(() => {
+        const savedCompletedProjects = JSON.parse(localStorage.getItem('completedProjects') || '[]');
+        setCompletedProjects(savedCompletedProjects);
+    }, []);
+
+    const handleProjectClick = (projectName) => {
+        navigate(`/project/${projectName}`);
+    };
+
+    const isProjectCompleted = (projectName) => {
+        return completedProjects.includes(projectName);
     };
 
     return (
-        <div className="projects-container">
+        <div className="projects-component">
+            <div className="projects-header">
+                <h2>Your Projects</h2>
+                <button className="add-project-btn">
+                    <PlusCircle size={18} />
+                    Add New Project
+                </button>
+            </div>
 
             <div className="projects-grid">
                 {projects.map((project) => (
-                    <div key={project.id} className="project-tile" onClick={() => {
-                        navigate(`/project/${project.name}`);
-                    }}>
-                        <h3 className="project-name">{project.name}</h3>
-                        <p className="project-description">{project.description}</p>
+                    <div
+                        key={project.id}
+                        className={`project-card ${isProjectCompleted(project.name) ? 'completed' : ''}`}
+                        onClick={() => handleProjectClick(project.name)}
+                    >
+                        {isProjectCompleted(project.name) && (
+                            <div className="completed-icon">
+                                <CheckCircle size={20} />
+                            </div>
+                        )}
+                        <h3>{project.name}</h3>
+                        <p>{project.description}</p>
+                        <div className="project-card-footer">
+                            <span className="project-status">
+                                {isProjectCompleted(project.name) ? 'Completed' : 'In Progress'}
+                            </span>
+                        </div>
                     </div>
                 ))}
-                <div className="project-tile add-tile" onClick={() => setShowModal(true)}>
-                    <span className="add-icon">+</span>
-                    <span className="add-text">New Project</span>
-                </div>
             </div>
-
-            {showModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h3>Add New Project</h3>
-                        <div className="input-group">
-                            <label htmlFor="projectName">Project Name (same as folder name)</label>
-                            <input
-                                type="text"
-                                id="projectName"
-                                value={projectName}
-                                onChange={(e) => setProjectName(e.target.value)}
-                                placeholder="Enter project name"
-                            />
-                        </div>
-                        <div className="input-group">
-                            <label htmlFor="projectDescription">Project Description</label>
-                            <textarea
-                                id="projectDescription"
-                                value={projectDescription}
-                                onChange={(e) => setProjectDescription(e.target.value)}
-                                placeholder="Enter project description"
-                                rows="3"
-                            />
-                        </div>
-                        <div className="input-group">
-                            <label htmlFor="repoUrl">GitHub Repository URL</label>
-                            <input
-                                type="text"
-                                id="repoUrl"
-                                value={repoUrl}
-                                onChange={(e) => setRepoUrl(e.target.value)}
-                                placeholder="Enter GitHub repo URL"
-                            />
-                        </div>
-                        <div className="modal-actions">
-                            <button className="cancel-btn" onClick={() => setShowModal(false)}>
-                                Cancel
-                            </button>
-                            <button className="create-btn" onClick={handleAddProject}>
-                                Create
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

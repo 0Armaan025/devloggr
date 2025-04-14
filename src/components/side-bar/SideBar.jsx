@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserIcon, FolderIcon, TrophyIcon, LogOutIcon } from 'lucide-react';
+import { UserIcon, FolderIcon, TrophyIcon, LogOutIcon, Settings } from 'lucide-react';
 import './sidebar.css';
 
 const SideBar = ({ onItemSelect }) => {
@@ -37,6 +37,13 @@ const SideBar = ({ onItemSelect }) => {
             >
                 <TrophyIcon size={24} />
                 <h3>Leaderboard</h3>
+            </div>
+            <div
+                className={`side-item ${selectedItem === 'Settings' ? 'active' : ''}`}
+                onClick={() => handleItemClick('Settings')}
+            >
+                <Settings size={24} />
+                <h3>Settings</h3>
             </div>
             <div
                 className={`side-item logout ${selectedItem === 'Log Out' ? 'active' : ''}`}

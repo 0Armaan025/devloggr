@@ -14,6 +14,28 @@ const LoginPage = () => {
         password: ''
     });
 
+    // Check if user is already logged in
+    useEffect(() => {
+        // Check if user is already authenticated
+        const token = localStorage.getItem('auth_token');
+        const storedUserData = localStorage.getItem('user_data');
+
+        if (token && storedUserData) {
+            try {
+                // User is already logged in, redirect to dashboard
+                const parsedUserData = JSON.parse(storedUserData);
+                setUserData(parsedUserData);
+                console.log('User already logged in:', parsedUserData.login || parsedUserData.name);
+                navigate('/dashboard');
+            } catch (error) {
+                console.error('Error parsing stored user data:', error);
+                // Clear invalid data
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('user_data');
+            }
+        }
+    }, [navigate]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
@@ -46,11 +68,22 @@ const LoginPage = () => {
             // Store token in localStorage
             localStorage.setItem('auth_token', data.token);
 
-            // Mock user data since we don't have a real user name from email login
-            const mockUsername = formData.email.split('@')[0];
+            // If user data is included in response, store it
+            if (data.user) {
+                localStorage.setItem('user_data', JSON.stringify(data.user));
+                setUserData(data.user);
+            } else {
+                // Create minimal user data from email
+                const mockUserData = {
+                    name: formData.email.split('@')[0],
+                    email: formData.email
+                };
+                localStorage.setItem('user_data', JSON.stringify(mockUserData));
+                setUserData(mockUserData);
+            }
 
             // Alert the username
-            alert(`Successfully logged in! Welcome back, ${mockUsername}`);
+            alert(`Successfully logged in! Welcome back, ${data.user?.name || formData.email.split('@')[0]}`);
 
             // Navigate to dashboard
             navigate('/dashboard');
@@ -70,8 +103,16 @@ const LoginPage = () => {
         if (typeof window.electron !== 'undefined') {
             try {
                 console.log('Starting GitHub authentication...');
-                // Using the simplest approach that should work with the preload script
-                window.electron.send('start-github-login');
+                // Check which method is available and use it
+                if (window.electron.send) {
+                    window.electron.send('start-github-login');
+                    console.log('Authentication request sent via window.electron.send');
+                } else if (window.electron.ipcRenderer && window.electron.ipcRenderer.send) {
+                    window.electron.ipcRenderer.send('start-github-login');
+                    console.log('Authentication request sent via window.electron.ipcRenderer.send');
+                } else {
+                    throw new Error('No valid IPC method available');
+                }
             } catch (e) {
                 console.error('Error during GitHub authentication:', e);
                 alert('Failed to start GitHub login: ' + e.message);
@@ -83,10 +124,16 @@ const LoginPage = () => {
     };
 
     useEffect(() => {
-        if (window.electron) {
-            // Listen for authentication success
+        if (window.electron && window.electron.on) {
+            console.log('Setting up auth-success listener in LoginComponent');
+
             const handleAuthSuccess = (token) => {
-                console.log('Received token:', token);
+                console.log('Auth success received with token');
+
+                if (!token) {
+                    console.error('No token received');
+                    return;
+                }
 
                 // Fetch user info with the token
                 fetch('https://api.github.com/user', {
@@ -94,32 +141,46 @@ const LoginPage = () => {
                         'Authorization': `token ${token}`
                     }
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`GitHub API responded with status ${response.status}`);
+                        }
+                        return response.json();
+                    })
                     .then(userData => {
+                        console.log('GitHub user data received');
                         setUserData(userData);
+
                         // Store token and user data
                         localStorage.setItem('auth_token', token);
                         localStorage.setItem('user_data', JSON.stringify(userData));
 
                         // Alert the username
-                        alert(`Successfully logged in with GitHub! Welcome back, ${userData.login}`);
+                        alert(`Successfully signed in with GitHub! Welcome back, ${userData.login}`);
 
                         // Navigate to dashboard
                         navigate('/dashboard');
                     })
                     .catch(error => {
                         console.error('Error fetching user data:', error);
+                        alert(`Error fetching user data: ${error.message}`);
                     });
             };
 
             window.electron.on('auth-success', handleAuthSuccess);
 
-            // Cleanup
             return () => {
-                window.electron.removeAllListeners('auth-success');
+                if (window.electron && window.electron.removeAllListeners) {
+                    window.electron.removeAllListeners('auth-success');
+                }
             };
         }
     }, [navigate]);
+
+    // If already authenticated, don't render the login form
+    if (userData) {
+        return <div className="loading">Redirecting to dashboard...</div>;
+    }
 
     return (
         <>

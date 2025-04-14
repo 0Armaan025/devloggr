@@ -5,6 +5,7 @@ import SideBar from '../../components/side-bar/SideBar';
 import ProfileComponent from "../../components/profile-component/ProfileComponent";
 import ProjectsComponent from '../../components/projects-component/ProjectsComponent';
 import LeaderboardPageComponent from '../../components/leaderboard/LeaderboardPageComponent';
+import SettingsComponent from '../../components/settings-component/SettingsComponent';
 
 const DashboardPage = () => {
 
@@ -45,6 +46,14 @@ const DashboardPage = () => {
                         {title === "Leaderboard" && (
                             <>
                                 <LeaderboardPageComponent />
+
+                            </>
+                        )}
+
+
+                        {title === "Settings" && (
+                            <>
+                                <SettingsComponent />
 
                             </>
                         )}

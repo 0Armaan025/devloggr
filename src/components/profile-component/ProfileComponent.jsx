@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Award, Folder, Clock, Edit, Save, X, Code, MessageSquare } from 'lucide-react';
+import { Award, Folder, Clock, Edit, Save, X, Code, MessageSquare, Star } from 'lucide-react';
 import './profilecomponent.css';
 
 const ProfileComponent = () => {
@@ -26,6 +26,7 @@ const ProfileComponent = () => {
         rank: 5,
         totalProjects: 12,
         totalSessions: 34,
+        score: 1250,
         mostUsedLanguage: {
             name: 'TypeScript',
             percentage: 68
@@ -78,7 +79,6 @@ const ProfileComponent = () => {
     };
 
     return (
-        // <div className="profileWrapper">
         <div className="profileComponent">
             <div className="profileLeftPanel">
                 <div className="profilePhotoContainer">
@@ -162,7 +162,7 @@ const ProfileComponent = () => {
                                     <Code size={18} />
                                     <span>Favorite Language</span>
                                 </div>
-                                <div className="languageValue" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <div className="languageValue">
                                     {favoriteLanguage}
                                     <button
                                         className="editButton"
@@ -233,6 +233,16 @@ const ProfileComponent = () => {
             <div className="profileRightPanel">
                 <div className="statsPanel">
                     <h3 className="panelTitle">Your Stats</h3>
+
+                    <div className="statItem">
+                        <div className="statIcon">
+                            <Star size={22} />
+                        </div>
+                        <div className="statInfo">
+                            <h4>Score</h4>
+                            <p>{stats.score} <span className="statSubtext">points</span></p>
+                        </div>
+                    </div>
 
                     <div className="statItem">
                         <div className="statIcon">
@@ -345,7 +355,6 @@ const ProfileComponent = () => {
                 )}
             </div>
         </div>
-
     );
 };
 
