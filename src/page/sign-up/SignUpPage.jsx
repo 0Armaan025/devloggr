@@ -80,43 +80,70 @@ const SignUpPage = () => {
     };
 
     useEffect(() => {
+        if (window.electron && window.electron.on) {
+            console.log('Setting up auth event listeners in SignUpPage');
 
-        if (window.electron) {
-
-            // Listen for authent   ication success
             const handleAuthSuccess = (token) => {
+                console.log('Auth success received with token:', token ? 'Valid token' : 'No token');
 
-                console.log('Received token:', token);
+                if (!token) {
+                    console.error('No token received in auth-success event');
+                    alert('Authentication failed: No token received');
+                    return;
+                }
 
-                // Fetch user info with the token
-                fetch('https://api.github.com/user', {
-                    headers: {
-                        'Authorization': `token ${token}`
-                    }
-                })
-                    .then(response => response.json())
-                    .then(userData => {
-                        setUserData(userData);
-                        // Store token and user data
-                        localStorage.setItem('auth_token', token);
-                        localStorage.setItem('user_data', JSON.stringify(userData));
-
-                        // Alert the username
-                        alert(`Successfully signed in with GitHub! Welcome, ${userData.login}`);
-
-                        // Navigate to dashboard
-                        navigate('/dashboard');
+                // Use a try-catch block for the API call
+                try {
+                    // Fetch user info with the token
+                    fetch('https://api.github.com/user', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
                     })
-                    .catch(error => {
-                        console.error('Error fetching user data:', error);
-                    });
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`GitHub API responded with status ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(userData => {
+                            console.log('GitHub user data received:', userData.login);
+
+                            // Store token and user data
+                            localStorage.setItem('auth_token', token);
+                            localStorage.setItem('user_data', JSON.stringify(userData));
+
+                            // Alert the username
+                            alert(`Successfully signed in with GitHub! Welcome, ${userData.login}`);
+
+                            // Navigate to dashboard
+                            setTimeout(() => navigate('/dashboard'), 500);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user data:', error);
+                            alert(`Error fetching user data: ${error.message}`);
+                        });
+                } catch (error) {
+                    console.error('Exception in auth handler:', error);
+                    alert('An error occurred during authentication: ' + error.message);
+                }
             };
 
-            window.electron.on('auth-success', handleAuthSuccess);
+            const handleAuthError = (errorMessage) => {
+                console.error('Auth error received:', errorMessage);
+                alert(`Authentication failed: ${errorMessage}`);
+            };
 
-            // Cleanup
+            // Register both success and error handlers
+            window.electron.on('auth-success', handleAuthSuccess);
+            window.electron.on('auth-error', handleAuthError);
+
             return () => {
-                window.electron.removeAllListeners('auth-success');
+                if (window.electron && window.electron.removeAllListeners) {
+                    console.log('Cleaning up auth event listeners');
+                    window.electron.removeAllListeners('auth-success');
+                    window.electron.removeAllListeners('auth-error');
+                }
             };
         }
     }, [navigate]);

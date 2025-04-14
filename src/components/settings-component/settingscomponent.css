@@ -332,3 +332,120 @@ input:checked+.slider:before {
         margin-bottom: 0.5rem;
     }
 }
+
+/* Twitter Connection Styles */
+.connected-account {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    background-color: var(--bg-tertiary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.connected-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #1DA1F2;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.username {
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.disconnect-btn {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.disconnect-btn:hover {
+    background-color: #ff33331a;
+    color: #ff3333;
+    border-color: #ff3333;
+}
+
+/* Twitter Auth Modal */
+.twitter-auth-modal {
+    max-width: 450px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-modal-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    padding: 5px;
+}
+
+.close-modal-btn:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.twitter-icon {
+    margin-bottom: 20px;
+    background-color: rgba(29, 161, 242, 0.1);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.permission-note {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 15px;
+    padding: 10px;
+    background-color: var(--bg-tertiary);
+    border-radius: 6px;
+}
+
+.twitter-connect-btn {
+    background-color: #1DA1F2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.twitter-connect-btn:hover {
+    background-color: #1a90da;
+}
+
+.twitter-connect-btn:disabled {
+    background-color: #1a90da80;
+    cursor: not-allowed;
+}
